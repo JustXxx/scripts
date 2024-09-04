@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 安装Dante
+# install Dante
 sudo apt-get update
 sudo apt-get install -y dante-server
 
