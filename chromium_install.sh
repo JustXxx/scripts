@@ -76,8 +76,24 @@ EOL
   echo "服务配置完成。"
 }
 
+check_and_start_docker() {
+  echo "检查 Docker 守护进程状态..."
+  if ! sudo systemctl is-active --quiet docker; then
+    echo "Docker 守护进程未运行，正在启动..."
+    sudo systemctl start docker
+    if ! sudo systemctl is-active --quiet docker; then
+      echo "无法启动 Docker 守护进程，请检查 Docker 安装。"
+      exit 1
+    fi
+    echo "Docker 守护进程已启动。"
+  else
+    echo "Docker 守护进程正在运行。"
+  fi
+}
+
 # 启动服务函数
 start_service() {
+  check_and_start_docker
   echo "开始启动服务..."
   cd $HOME && cd chromium
   docker compose up -d
